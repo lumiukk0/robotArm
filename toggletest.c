@@ -1,3 +1,5 @@
+
+// gcc -o stepper_control stepper_control.c -lwiringPi -lpthread
 #include <wiringPi.h>
 #include <stdio.h>
 #include <stdlib.h>
