@@ -4,10 +4,10 @@ import time
 import threading
 
 # GPIO Pins
-out1 = 11
-out2 = 12
-out3 = 13
-out4 = 16
+out1_1 = 11
+out1_2 = 12
+out1_3 = 13
+out1_4 = 16
 
 # Variables
 step_sleep = 0.002  # Time to wait between steps
@@ -17,22 +17,38 @@ reverse = False     # Direction flag
 
 # GPIO setup
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(out1, GPIO.OUT)
-GPIO.setup(out2, GPIO.OUT)
-GPIO.setup(out3, GPIO.OUT)
-GPIO.setup(out4, GPIO.OUT)
+GPIO.setup(out1_1, GPIO.OUT)
+GPIO.setup(out1_2, GPIO.OUT)
+GPIO.setup(out1_3, GPIO.OUT)
+GPIO.setup(out1_4, GPIO.OUT)
+
+GPIO.setup(out2_1, GPIO.OUT)
+GPIO.setup(out2_2, GPIO.OUT)
+GPIO.setup(out2_3, GPIO.OUT)
+GPIO.setup(out2_4, GPIO.OUT)
+
 
 # Initialize
-GPIO.output(out1, GPIO.LOW)
-GPIO.output(out2, GPIO.LOW)
-GPIO.output(out3, GPIO.LOW)
-GPIO.output(out4, GPIO.LOW)
+GPIO.output(out1_1, GPIO.LOW)
+GPIO.output(out1_2, GPIO.LOW)
+GPIO.output(out1_3, GPIO.LOW)
+GPIO.output(out1_4, GPIO.LOW)
+
+GPIO.output(out2_1, GPIO.LOW)
+GPIO.output(out2_2, GPIO.LOW)
+GPIO.output(out2_3, GPIO.LOW)
+GPIO.output(out2_4, GPIO.LOW)
 
 def cleanup():
-    GPIO.output(out1, GPIO.LOW)
-    GPIO.output(out2, GPIO.LOW)
-    GPIO.output(out3, GPIO.LOW)
-    GPIO.output(out4, GPIO.LOW)
+    GPIO.output(out1_1, GPIO.LOW)
+    GPIO.output(out1_2, GPIO.LOW)
+    GPIO.output(out1_3, GPIO.LOW)
+    GPIO.output(out1_4, GPIO.LOW)
+    
+    GPIO.output(out2_1, GPIO.LOW)
+    GPIO.output(out2_2, GPIO.LOW)
+    GPIO.output(out2_3, GPIO.LOW)
+    GPIO.output(out2_4, GPIO.LOW)
     GPIO.cleanup()
 
 def motor_control():
@@ -47,25 +63,25 @@ def motor_control():
                     i += 1
 
                 if i % 4 == 0:
-                    GPIO.output(out4, GPIO.HIGH)
-                    GPIO.output(out3, GPIO.LOW)
-                    GPIO.output(out2, GPIO.LOW)
-                    GPIO.output(out1, GPIO.LOW)
+                    GPIO.output(out1_4, GPIO.HIGH)
+                    GPIO.output(out1_3, GPIO.LOW)
+                    GPIO.output(out1_2, GPIO.LOW)
+                    GPIO.output(out1_1, GPIO.LOW)
                 elif i % 4 == 1:
-                    GPIO.output(out4, GPIO.LOW)
-                    GPIO.output(out3, GPIO.LOW)
-                    GPIO.output(out2, GPIO.HIGH)
-                    GPIO.output(out1, GPIO.LOW)
+                    GPIO.output(out1_4, GPIO.LOW)
+                    GPIO.output(out1_3, GPIO.LOW)
+                    GPIO.output(out1_2, GPIO.HIGH)
+                    GPIO.output(out1_1, GPIO.LOW)
                 elif i % 4 == 2:
-                    GPIO.output(out4, GPIO.LOW)
-                    GPIO.output(out3, GPIO.HIGH)
-                    GPIO.output(out2, GPIO.LOW)
-                    GPIO.output(out1, GPIO.LOW)
+                    GPIO.output(out1_4, GPIO.LOW)
+                    GPIO.output(out1_3, GPIO.HIGH)
+                    GPIO.output(out1_2, GPIO.LOW)
+                    GPIO.output(out1_1, GPIO.LOW)
                 elif i % 4 == 3:
-                    GPIO.output(out4, GPIO.LOW)
-                    GPIO.output(out3, GPIO.LOW)
-                    GPIO.output(out2, GPIO.LOW)
-                    GPIO.output(out1, GPIO.HIGH)
+                    GPIO.output(out1_4, GPIO.LOW)
+                    GPIO.output(out1_3, GPIO.LOW)
+                    GPIO.output(out1_2, GPIO.LOW)
+                    GPIO.output(out1_1, GPIO.HIGH)
 
                 time.sleep(abs(step_sleep))
             else:
