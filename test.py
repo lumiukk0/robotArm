@@ -2,6 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import threading
+import time
 
 # GPIO Pins
 out1 = 11
@@ -10,10 +11,11 @@ out3 = 13
 out4 = 16
 
 # Variables
-step_sleep = 0.002  # Time to wait between steps
-step_count = 200    # Number of steps
+step_sleep = 0.0015  # Time to wait between steps
+step_count = 20000   # Number of steps
 running = True      # Motor running state
 reverse = False     # Direction flag
+
 
 # GPIO setup
 GPIO.setmode(GPIO.BOARD)
@@ -36,48 +38,54 @@ def cleanup():
     GPIO.cleanup()
 
 def motor_control():
-    global step_sleep, running, reverse
+
     i = 0
+    passed2= 0
     try:
-        while True:
-            if running:
-                if reverse:
-                    i -= 1
-                else:
-                    i += 1
-
-                if i % 4 == 0:
-                    GPIO.output(out4, GPIO.HIGH)
-                    GPIO.output(out3, GPIO.LOW)
-                    GPIO.output(out2, GPIO.LOW)
-                    GPIO.output(out1, GPIO.LOW)
-                elif i % 4 == 1:
-                    GPIO.output(out4, GPIO.LOW)
-                    GPIO.output(out3, GPIO.LOW)
-                    GPIO.output(out2, GPIO.HIGH)
-                    GPIO.output(out1, GPIO.LOW)
-                elif i % 4 == 2:
-                    GPIO.output(out4, GPIO.LOW)
-                    GPIO.output(out3, GPIO.HIGH)
-                    GPIO.output(out2, GPIO.LOW)
-                    GPIO.output(out1, GPIO.LOW)
-                elif i % 4 == 3:
-                    GPIO.output(out4, GPIO.LOW)
-                    GPIO.output(out3, GPIO.LOW)
-                    GPIO.output(out2, GPIO.LOW)
-                    GPIO.output(out1, GPIO.HIGH)
-
-                time.sleep(abs(step_sleep))
+        while (abs(i)<step_count):
+    #        if running:
+            if reverse:
+                i -= 1
             else:
-                time.sleep(0.1)  # Small delay when motor is off
+                i += 1
+
+            if i % 4 == 0:
+                GPIO.output(out4, GPIO.HIGH)
+                GPIO.output(out3, GPIO.LOW)
+                GPIO.output(out2, GPIO.LOW)
+                GPIO.output(out1, GPIO.LOW)
+            elif i % 4 == 1:
+                GPIO.output(out4, GPIO.LOW)
+                GPIO.output(out3, GPIO.LOW)
+                GPIO.output(out2, GPIO.HIGH)
+                GPIO.output(out1, GPIO.LOW)
+            elif i % 4 == 2:
+                GPIO.output(out4, GPIO.LOW)
+                GPIO.output(out3, GPIO.HIGH)
+                GPIO.output(out2, GPIO.LOW)
+                GPIO.output(out1, GPIO.LOW)
+            elif i % 4 == 3:
+                GPIO.output(out4, GPIO.LOW)
+                GPIO.output(out3, GPIO.LOW)
+                GPIO.output(out2, GPIO.LOW)
+                GPIO.output(out1, GPIO.HIGH)
+
+            passedTime = time.time()
+
+
+            print(f"Elapsed time: {passedTime - passed2}")
+            passed2 = passedTime
+            time.sleep(step_sleep)
+  #          else:
+ #               time.sleep(step_sleep)  # Small delay when motor is off
     except KeyboardInterrupt:
         cleanup()
         exit(1)
 
 # Start motor control in a separate thread
-motor_thread = threading.Thread(target=motor_control)
-motor_thread.daemon = True
-motor_thread.start()
+#motor_thread = threading.Thread(target=motor_control)
+#motor_thread.daemon = True
+#motor_thread.start()
 
 # Main loop for user input
 try:
@@ -85,14 +93,16 @@ try:
         command = input("Enter command (l: faster, s: slower, h: toggle, x: exit, r: reverse): ").strip().lower()
 
         if command == "l":
-            step_sleep = max(step_sleep /2, 0.0001)  # Decrease step_sleep (faster)
+            step_sleep = step_sleep -0.0001  # Decrease step_sleep (faster)
             print(f"Speed increased, step_sleep: {step_sleep:.4f}")
         elif command == "s":
-            step_sleep = min(step_sleep * 2 , 0.1)  # Increase step_sleep (slower)
+            step_sleep = step_sleep + 0.0001  # Increase step_sleep (slower)
             print(f"Speed decreased, step_sleep: {step_sleep:.4f}")
         elif command == "h":
-            running = not running  # Toggle motor state
-            print("Motor toggled", "ON" if running else "OFF")
+
+
+            print("Motor toggled {step_count:.1f}" )
+            motor_control()
         elif command == "r":
             reverse = not reverse  # Reverse motor direction
             print("Direction toggled", "Reverse" if reverse else "Forward")
