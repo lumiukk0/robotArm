@@ -51,7 +51,7 @@ def cleanup():
     GPIO.output(out2_4, GPIO.LOW)
     GPIO.cleanup()
 
-def motor_control():
+def motor_control1():
     global step_sleep, running, reverse
     i = 0
     try:
@@ -89,6 +89,46 @@ def motor_control():
     except KeyboardInterrupt:
         cleanup()
         exit(1)
+
+def motor_control2():
+    global step_sleep, running, reverse
+    i = 0
+    try:
+        while True:
+            if running:
+                if reverse:
+                    i -= 1
+                else:
+                    i += 1
+
+                if i % 4 == 0:
+                    GPIO.output(out2_4, GPIO.HIGH)
+                    GPIO.output(out2_3, GPIO.LOW)
+                    GPIO.output(out2_2, GPIO.LOW)
+                    GPIO.output(out2_1, GPIO.LOW)
+                elif i % 4 == 1:
+                    GPIO.output(out2_4, GPIO.LOW)
+                    GPIO.output(out2_3, GPIO.LOW)
+                    GPIO.output(out2_2, GPIO.HIGH)
+                    GPIO.output(out2_1, GPIO.LOW)
+                elif i % 4 == 2:
+                    GPIO.output(out2_4, GPIO.LOW)
+                    GPIO.output(out2_3, GPIO.HIGH)
+                    GPIO.output(out2_2, GPIO.LOW)
+                    GPIO.output(out2_1, GPIO.LOW)
+                elif i % 4 == 3:
+                    GPIO.output(out2_4, GPIO.LOW)
+                    GPIO.output(out2_3, GPIO.LOW)
+                    GPIO.output(out2_2, GPIO.LOW)
+                    GPIO.output(out2_1, GPIO.HIGH)
+
+                time.sleep(abs(step_sleep))
+            else:
+                time.sleep(0.1)  # Small delay when motor is off
+    except KeyboardInterrupt:
+        cleanup()
+        exit(1)
+
 
 # Start motor control in a separate thread
 motor_thread = threading.Thread(target=motor_control)
