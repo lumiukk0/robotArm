@@ -23,19 +23,19 @@ int reverse = 0;         // Direction flag
 
 void rotateMotor(int motor) {
     int i;
-    for (i = 0; i < 8; i++) { // One full cycle (8 steps for full rotation)
-        int step = reverse ? (7 - i) : i;
+    for (i = 0; i < 4; i++) { // One full cycle (8 steps for full rotation)
+        int step = reverse ? (3 - i) : i;
         
         if (motor == 1) {
-            digitalWrite(OUT1_4, step % 4 == 0);
-            digitalWrite(OUT1_3, step % 4 == 2);
+            digitalWrite(OUT1_1, step % 4 == 0);
             digitalWrite(OUT1_2, step % 4 == 1);
-            digitalWrite(OUT1_1, step % 4 == 3);
+            digitalWrite(OUT1_3, step % 4 == 2);
+            digitalWrite(OUT1_4, step % 4 == 3);
         } else {
-            digitalWrite(OUT2_4, step % 4 == 0);
-            digitalWrite(OUT2_3, step % 4 == 2);
+            digitalWrite(OUT2_1, step % 4 == 0);
             digitalWrite(OUT2_2, step % 4 == 1);
-            digitalWrite(OUT2_1, step % 4 == 3);
+            digitalWrite(OUT2_3, step % 4 == 2);
+            digitalWrite(OUT2_4, step % 4 == 3);
         }
         usleep((int)stepSleep);
     }

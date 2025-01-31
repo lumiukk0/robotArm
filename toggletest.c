@@ -1,5 +1,5 @@
 
-// gcc -o stepper_control stepper_control.c -lwiringPi -lpthread
+// gcc -o stepper_control toggletest.c -lwiringPi -lpthread
 #include <wiringPi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,28 +47,29 @@ void *motorControl1(void *arg) {
 
             switch (i % 4) {
                 case 0:
-                    digitalWrite(OUT1_4, HIGH);
-                    digitalWrite(OUT1_3, LOW);
-                    digitalWrite(OUT1_2, LOW);
-                    digitalWrite(OUT1_1, LOW);
-                    break;
-                case 1:
-                    digitalWrite(OUT1_4, LOW);
-                    digitalWrite(OUT1_3, LOW);
-                    digitalWrite(OUT1_2, HIGH);
-                    digitalWrite(OUT1_1, LOW);
-                    break;
-                case 2:
-                    digitalWrite(OUT1_4, LOW);
-                    digitalWrite(OUT1_3, HIGH);
-                    digitalWrite(OUT1_2, LOW);
-                    digitalWrite(OUT1_1, LOW);
-                    break;
-                case 3:
                     digitalWrite(OUT1_4, LOW);
                     digitalWrite(OUT1_3, LOW);
                     digitalWrite(OUT1_2, LOW);
                     digitalWrite(OUT1_1, HIGH);
+                    break;
+                case 1:
+                    digitalWrite(OUT1_2, HIGH);
+                    digitalWrite(OUT1_4, LOW);
+                    digitalWrite(OUT1_3, LOW);
+                    digitalWrite(OUT1_1, LOW);
+                    break;
+                case 2:
+                    digitalWrite(OUT1_3, HIGH);
+                    digitalWrite(OUT1_4, LOW);
+                    digitalWrite(OUT1_2, LOW);
+                    digitalWrite(OUT1_1, LOW);
+                    break;
+                case 3:
+                    digitalWrite(OUT1_1, LOW);
+                    digitalWrite(OUT1_4, HIGH);
+                    digitalWrite(OUT1_3, LOW);
+                    digitalWrite(OUT1_2, LOW);
+                    
                     break;
             }
             usleep((int)stepSleep);
